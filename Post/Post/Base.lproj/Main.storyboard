@@ -58,7 +58,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="You can Choose what Title you would like to put" id="Yr7-gC-bhs"/>
+                    <navigationItem key="navigationItem" title="You can Choose what Title you would like to put" id="Yr7-gC-bhs">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Ybk-Wg-rHJ">
+                            <connections>
+                                <action selector="addButtonTapped:" destination="BYZ-38-t0r" id="cTf-xu-j0w"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="oZG-eE-jOE" id="4kF-Uw-dNz"/>
                     </connections>

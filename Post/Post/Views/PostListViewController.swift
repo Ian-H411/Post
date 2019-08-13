@@ -21,7 +21,7 @@ class PostListViewController: UIViewController,UITableViewDelegate, UITableViewD
         tableView.dataSource = self
         postController.fetchPosts {
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self.reloadTableView()
         
             }
         }
@@ -57,7 +57,40 @@ class PostListViewController: UIViewController,UITableViewDelegate, UITableViewD
         cell.detailTextLabel?.text = "\(post.username) + \(post.timestamp)"
         return cell
     }
+    func presentNewPostAlert(){
+        ///if its empty use me
+        let badAlert = UIAlertController(title: "INVALID", message: "please fill out all fields", preferredStyle: .alert)
+        badAlert.addAction(UIAlertAction(title: "cancel", style: .cancel, handler: { (action) in
+            self.presentNewPostAlert()
+            return
+        }))
+        /////// if they did it right use me
+        let alert = UIAlertController(title: "add a new Post", message: "please be kind ", preferredStyle: .alert)
+        alert.addTextField { (textField) in
+        }
+        alert.addTextField { (textfield) in
+        }
+        alert.addAction(UIAlertAction(title: "Add", style: .default, handler: { (action) in
+            guard let userName = alert.textFields?[0].text else {return}
+            guard let text = alert.textFields?[1].text else {return}
+            if text == "" || userName == ""{
+                self.present(badAlert, animated: true, completion: nil)
+            }
+            self.postController.addNewPostWith(username: userName, text: text, completion: {
+                DispatchQueue.main.async {
+                    self.reloadTableView()
+                }
+            })
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        self.present(alert, animated: true, completion: nil)
+    }
     
+    //MARK: - actions
+    
+    @IBAction func addButtonTapped(_ sender: Any) {
+        presentNewPostAlert()
+    }
     
     // MARK: - Navigation
     
@@ -68,4 +101,15 @@ class PostListViewController: UIViewController,UITableViewDelegate, UITableViewD
     }
     
     
+}
+extension PostListViewController{
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row >= postController.posts.count - 1 {
+            postController.fetchPosts(reset: false) {
+                DispatchQueue.main.async {
+                    tableView.reloadData()
+                }
+            }
+        }
+    }
 }
