@@ -107,7 +107,7 @@ extension PostListViewController{
         if indexPath.row >= postController.posts.count - 1 {
             postController.fetchPosts(reset: false) {
                 DispatchQueue.main.async {
-                    tableView.reloadData()
+                    self.reloadTableView()
                 }
             }
         }
